@@ -1,0 +1,33 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>ViDownloader history</title>
+<link rel="stylesheet" href="ui.css">
+<link rel="stylesheet" href="page.css">
+</head>
+<body>
+<div class="page">
+  <header class="page-head">
+    <img src="icons/icon48.png" alt="" width="32" height="32">
+    <div class="grow">
+      <h1>Download history</h1>
+      <div class="muted" id="summary">Loading…</div>
+    </div>
+  </header>
+
+  <div class="toolbar">
+    <input type="text" id="search" placeholder="Search title, uploader, site…" spellcheck="false">
+    <select id="platform"><option value="">All platforms</option></select>
+    <span class="grow"></span>
+    <button class="btn" id="openFolder">Open downloads folder</button>
+    <button class="btn" id="copyAll" title="Copy credit lines for everything shown">Copy all credits</button>
+    <button class="btn" id="exportCsv">Export CSV</button>
+    <button class="btn danger" id="clearAll" title="Empties this list. Your downloaded files are not deleted.">Clear history</button>
+  </div>
+
+  <div class="card hist" id="list"></div>
+</div>
+<script type="module" src="history.js"></script>
+</body>
+</html>

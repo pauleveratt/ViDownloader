@@ -1,0 +1,196 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>ViDownloader</title>
+<link rel="stylesheet" href="ui.css">
+<link rel="stylesheet" href="popup.css">
+</head>
+<body>
+<header>
+  <img src="icons/icon32.png" alt="" width="20" height="20">
+  <span class="brand">ViDownloader</span>
+  <span id="status" class="dot" title="Checking helper…"></span>
+  <span class="grow"></span>
+  <button class="btn ghost small icon" id="openFolder" title="Open downloads folder">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+  </button>
+  <button class="btn ghost small icon" id="historyBtn" title="Download history">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/><path d="M12 7v5l3 2"/></svg>
+  </button>
+  <button class="btn ghost small icon" id="settingsBtn" title="Settings">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>
+  </button>
+</header>
+
+<main>
+  <!-- First-run: paste the token printed by install.ps1 -->
+  <section id="setup" class="card pad" hidden>
+    <h2>Connect to the helper</h2>
+    <p class="muted">Paste the access token that <code>install.ps1</code> printed (it was copied to your clipboard).</p>
+    <div class="row">
+      <input type="password" id="setupToken" class="grow" placeholder="Access token" autocomplete="off">
+      <button class="btn primary" id="setupSave">Connect</button>
+    </div>
+    <p id="setupMsg" class="err-text" hidden></p>
+  </section>
+
+  <section id="offline" class="notice err" hidden>
+    <b>Helper isn't running</b>
+    Double-click <code>start-helper.vbs</code> in the ViDownloader folder (it also starts at login), then reopen this popup.
+  </section>
+
+  <!-- The current page -->
+  <section id="page" class="card" hidden>
+    <div class="media" id="media">
+      <div class="thumb skeleton" id="thumb"></div>
+      <div class="meta grow">
+        <div class="title" id="title"><span class="skeleton line"></span></div>
+        <div class="sub" id="sub"><span class="skeleton line short"></span></div>
+      </div>
+    </div>
+
+    <div id="pageMsg" class="notice" hidden></div>
+
+    <div id="dlControls" class="controls" hidden>
+      <div class="seg" id="modeSeg" role="radiogroup" aria-label="Format">
+        <button data-mode="video" class="on">Video MP4</button>
+        <button data-mode="mp3">MP3</button>
+        <button data-mode="wav">WAV</button>
+      </div>
+      <div class="field-row">
+        <label class="field" id="qualityField">
+          <span>Quality</span>
+          <select id="quality">
+            <option value="1080">1080p</option>
+            <option value="720">720p</option>
+            <option value="best">Best available</option>
+          </select>
+        </label>
+        <label class="field">
+          <span>Start</span>
+          <span class="time-input">
+            <input type="text" id="start" placeholder="0:00" spellcheck="false">
+            <button class="now" data-target="start" title="Use the video's current time">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2 2M10 2h4"/></svg>
+            </button>
+          </span>
+        </label>
+        <label class="field">
+          <span>End</span>
+          <span class="time-input">
+            <input type="text" id="end" placeholder="end" spellcheck="false">
+            <button class="now" data-target="end" title="Use the video's current time">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2 2M10 2h4"/></svg>
+            </button>
+          </span>
+        </label>
+      </div>
+      <div class="hint" id="qualityHint" hidden></div>
+      <div class="hint" id="trimHint" hidden></div>
+      <button class="btn primary block" id="downloadBtn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>
+        <span id="downloadLabel">Download</span>
+      </button>
+    </div>
+
+    <div id="liveControls" class="controls" hidden>
+      <div class="seg" id="liveSeg">
+        <button data-from="now" class="on">From now</button>
+        <button data-from="start" id="fromStartBtn">From start of stream</button>
+      </div>
+      <div class="field-row">
+        <label class="field">
+          <span>Quality</span>
+          <select id="liveQuality">
+            <option value="1080">1080p</option>
+            <option value="720">720p</option>
+            <option value="best">Best</option>
+          </select>
+        </label>
+        <label class="field grow">
+          <span>Auto-stop after (minutes)</span>
+          <input type="number" id="maxMinutes" min="0" step="1" placeholder="Until I press Stop">
+        </label>
+      </div>
+      <button class="btn rec block" id="recordLiveBtn">
+        <span class="rec-dot"></span> Record live stream
+      </button>
+    </div>
+
+    <label class="check" id="loginRow" hidden>
+      <input type="checkbox" id="useLogin">
+      <span>Use my Chrome login <span class="muted">· for private or age-restricted posts</span></span>
+    </label>
+
+    <!-- Progress + Show for jobs started from this popup -->
+    <div id="pageJobs" class="page-jobs" hidden></div>
+  </section>
+
+  <!-- Fallbacks -->
+  <section id="more" hidden>
+    <div class="sec-head"><h3>Other ways to capture</h3></div>
+    <div class="card">
+      <details id="sniffBox">
+        <summary>
+          <span>Detected media on this page</span>
+          <span class="chip" id="sniffCount">0</span>
+          <span class="grow"></span>
+          <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+        </summary>
+        <div id="sniffList" class="sniff-list"></div>
+        <p class="hint pad-x" id="sniffEmpty">Nothing detected yet. Press play on the video, then reopen this popup.</p>
+      </details>
+      <div class="divider"></div>
+      <details id="imgBox">
+        <summary>
+          <span>Images on this page</span>
+          <span class="chip" id="imgCount">…</span>
+          <span class="grow"></span>
+          <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+        </summary>
+        <div class="img-grid" id="imgGrid"></div>
+        <p class="hint pad-x" id="imgEmpty" hidden>No large images found. Scroll so the post is on screen (for carousels, swipe through the slides), then reopen.</p>
+        <div class="img-actions" id="imgActions" hidden>
+          <button class="btn ghost small" id="imgAll">Select all</button>
+          <span class="grow hint" id="imgSel"></span>
+          <button class="btn primary small" id="imgSave">Save selected</button>
+        </div>
+      </details>
+      <div class="divider"></div>
+      <div class="tabrec">
+        <div class="grow">
+          <div class="tabrec-title">Save current frame</div>
+          <div class="hint">Pause on the moment you want. Supported sites give a full-resolution PNG straight from the source; elsewhere it's captured from the player.</div>
+        </div>
+        <button class="btn" id="frameBtn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8a2 2 0 0 1 2-2h2l1.5-2h5L16 6h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2z"/><circle cx="12" cy="12.5" r="3.5"/></svg>
+          <span id="frameLabel">Save frame</span>
+        </button>
+      </div>
+      <div class="divider"></div>
+      <div class="tabrec" id="tabrec">
+        <div class="grow">
+          <div class="tabrec-title" id="tabrecTitle">Record this tab</div>
+          <div class="hint" id="tabrecHint">Captures what's playing, with sound, in real time. Works anywhere (e.g. Instagram Live). Tip: make the video fill the tab first.</div>
+        </div>
+        <button class="btn" id="tabrecBtn"><span class="rec-dot"></span> Record</button>
+      </div>
+    </div>
+  </section>
+  <!-- Recent downloads (from history) + anything still running for other tabs -->
+  <section id="recentSec" hidden>
+    <div class="sec-head">
+      <h3>Recent downloads</h3>
+      <span class="grow"></span>
+      <button class="btn ghost small" id="clearRecent" title="Clears this list. Everything stays on the History page.">Clear</button>
+      <button class="btn ghost small" id="viewHistory">View all</button>
+    </div>
+    <div id="otherJobs" class="jobs" hidden></div>
+    <div id="recent" class="card recent-list"></div>
+    <p class="hint" id="recentEmpty" hidden>Nothing new since you cleared this list. Older downloads are on the History page.</p>
+  </section>
+</main>
+<script type="module" src="popup.js"></script>
+</body>
+</html>

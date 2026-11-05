@@ -1,0 +1,62 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>ViDownloader settings</title>
+<link rel="stylesheet" href="ui.css">
+<link rel="stylesheet" href="page.css">
+</head>
+<body>
+<div class="page narrow">
+  <header class="page-head">
+    <img src="icons/icon48.png" alt="" width="32" height="32">
+    <div>
+      <h1>ViDownloader settings</h1>
+      <div class="muted row"><span id="status" class="dot"></span><span id="statusText">Checking helper…</span></div>
+    </div>
+  </header>
+
+  <section class="card pad">
+    <h2>Helper connection</h2>
+    <p class="muted">The helper is the small program on this PC that does the downloading. <code>install.ps1</code> printed its access token and copied it to your clipboard.</p>
+    <div class="form-grid">
+      <label for="token">Access token</label>
+      <div class="row"><input type="password" id="token" class="grow" autocomplete="off"><button class="btn" id="showToken" type="button">Show</button></div>
+      <label for="port">Port</label>
+      <input type="number" id="port" style="width:110px">
+    </div>
+    <div class="row actions"><button class="btn primary" id="saveConn">Save &amp; test</button><span id="connMsg" class="muted"></span></div>
+  </section>
+
+  <section class="card pad">
+    <h2>Downloads</h2>
+    <div class="form-grid">
+      <label for="outputDir">Save to folder</label>
+      <div class="row"><input type="text" id="outputDir" class="grow" spellcheck="false"><button class="btn" id="openFolder" type="button">Open</button></div>
+      <label for="quality">Default quality</label>
+      <select id="quality" style="width:200px">
+        <option value="1080">1080p (recommended)</option>
+        <option value="720">720p</option>
+        <option value="best">Best available</option>
+      </select>
+      <label for="mode">Default format</label>
+      <select id="mode" style="width:200px">
+        <option value="video">Video MP4</option>
+        <option value="mp3">Audio MP3</option>
+        <option value="wav">Audio WAV</option>
+      </select>
+    </div>
+    <p class="muted small">Files are saved as <code>&lt;folder&gt;\&lt;Platform&gt;\&lt;uploader&gt; - &lt;title&gt; [id].mp4</code>. Videos are always H.264/AAC MP4 so they drop straight into Premiere, Resolve or CapCut.</p>
+    <div class="row actions"><button class="btn primary" id="saveDl">Save</button><span id="dlMsg" class="muted"></span></div>
+  </section>
+
+  <section class="card pad">
+    <h2>yt-dlp</h2>
+    <p class="muted">Sites change often. If a site that used to work starts failing, update yt-dlp. The helper also updates it automatically once a week.</p>
+    <div class="row actions"><span>Installed version: <b id="ytVersion">…</b></span><span class="grow"></span><button class="btn" id="update">Update now</button></div>
+    <pre id="updateOut" hidden></pre>
+  </section>
+</div>
+<script type="module" src="options.js"></script>
+</body>
+</html>

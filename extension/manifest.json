@@ -1,0 +1,40 @@
+{
+  "manifest_version": 3,
+  "name": "ViDownloader",
+  "version": "1.0.0",
+  "description": "Download clips from YouTube, TikTok, Instagram, Twitch and more for editing — trim, record live streams, or record a tab.",
+  "minimum_chrome_version": "116",
+  "icons": {
+    "16": "icons/icon16.png",
+    "32": "icons/icon32.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "ViDownloader",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "32": "icons/icon32.png"
+    }
+  },
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
+  "options_page": "options.html",
+  "permissions": [
+    "activeTab",
+    "cookies",
+    "storage",
+    "scripting",
+    "webRequest",
+    "tabCapture",
+    "offscreen",
+    "tabs",
+    "alarms"
+  ],
+  "host_permissions": [
+    "<all_urls>"
+  ]
+}
