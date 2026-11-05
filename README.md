@@ -2,6 +2,16 @@
 
 One-click downloads for edits: YouTube (long-form + Shorts), TikTok, Instagram Reels, Twitch clips & VODs, and 1,000+ other sites. Trim to just the part you need, record live streams, or record any tab as a last resort. Every video comes out as **H.264/AAC MP4** so it drops straight into Premiere, Resolve or CapCut.
 
+> [!WARNING]
+> **Copyright and platform terms: you are responsible for how you use this tool.**
+>
+> - **Only download or record content you have the right to use:** your own work, content you have permission or a license for, or use that is allowed by law in your country (such as fair use or fair dealing). Those rules are narrow, differ by country and depend on the situation. Being able to download something does not mean you may reuse it, and crediting the creator does not replace permission.
+> - **Platform terms may prohibit downloading or recording.** YouTube, TikTok, Instagram, Twitch and other services have their own terms, and using this tool may breach them even when the content itself is lawful to use. That can put your account at risk. Check the terms of each service and follow them.
+> - **Respect people's privacy.** Don't capture or share private or restricted content, or use your login to access material you aren't entitled to redistribute.
+> - **DRM is out of scope.** This project does not bypass DRM or other technical protection measures, and must not be modified or used to do so.
+>
+> This project is independent and is not affiliated with or endorsed by any platform named here. This notice is not legal advice; if you're unsure, ask a qualified lawyer. The software is provided "as is", without warranty, and the authors accept no liability for how it is used. See [LICENSE](LICENSE).
+
 It has two parts:
 
 - **Chrome extension** (`extension/`): the UI you click on a video page.
@@ -50,4 +60,8 @@ Files go to `Videos\ViDownloader\<Platform>\<uploader> - <title> [id].mp4` (fold
 - **Instagram says login required / rate-limit**: make sure you're logged in to Instagram in Chrome and *Use my Chrome login* is ticked.
 - **Remove from startup**: `install.ps1 -NoStartup`, or delete *ViDownloader Helper* from `shell:startup`.
 
-Use it responsibly: respect each platform's terms and copyright/fair use for the material you include in client work.
+## License
+
+The code is released under the [MIT License](LICENSE). That covers this project's code only. It gives you no rights to any content you download or record, and it doesn't change the copyright or platform terms described at the top of this page.
+
+ViDownloader relies on [yt-dlp](https://github.com/yt-dlp/yt-dlp) and [FFmpeg](https://ffmpeg.org/), which are separate projects under their own licenses. Neither is included in this repository; `install.ps1` fetches yt-dlp from its official releases and checks for FFmpeg (installing it with winget if it's missing).
